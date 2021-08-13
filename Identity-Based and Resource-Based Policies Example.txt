@@ -1,0 +1,83 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": "*"
+        }
+    ]
+}
+
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1627912210722",
+      "Action": "s3:*",
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::demobucket-1-12345"
+    }
+  ]
+}
+
+
+
+
+
+Identity Based Policy for S3 (IAM User Policy):
+=================================================
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt1627912210722",
+            "Action": "s3:*",
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::demobucket-1-12345"
+        },
+        {
+            "Sid": "Stmt1627979125714",
+            "Action": [
+                "s3:ListAllMyBuckets"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Sid": "Stmt1627979237728",
+            "Action": "s3:*",
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::demobucket-1-12345/*"
+        }
+    ]
+}
+
+
+Resource Based Policy for S3 (Bucket Policy):
+===============================================
+{
+    "Version": "2012-10-17",
+    "Id": "Policy162798676362040",
+    "Statement": [
+        {
+            "Sid": "Stmt16279866339555",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::Your-Account-ID:user/syam"
+            },
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::demobucket-2-678910"
+        },
+        {
+            "Sid": "Stmt1627986360795",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::Your-Account-ID:user/syam"
+            },
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::demobucket-2-678910/*"
+        }
+    ]
+}

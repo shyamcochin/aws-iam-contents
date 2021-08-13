@@ -1,0 +1,99 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "IAMAccess",
+            "Effect": "Allow",
+            "Action": "iam:*",		
+            "Resource": "*"
+        },
+	    {
+            "Sid": "DenyDeletingAdminUser",
+            "Effect": "Deny",
+            "Action": "iam:*",
+            "Resource": [
+		        "arn:aws:iam::Your-Account-ID:user/admin",
+		        "arn:aws:iam::Your-Account-ID:user/syam.kumar"
+	        ]
+        },	    
+        {
+            "Sid": "AllowEC2ReadyOnlyAccess",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:Get*",
+                "ec2:Describe*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "DenyPermBoundaryIAMPolicyAlteration",
+            "Effect": "Deny",
+            "Action": [
+                "iam:DeletePolicy",
+                "iam:DeletePolicyVersion",
+                "iam:CreatePolicyVersion",
+                "iam:SetDefaultPolicyVersion"
+            ],
+            "Resource": [
+                "arn:aws:iam::Your-Account-ID:policy/IAMRestrictPermissionsBoundary"
+            ]
+        },
+	    {
+            "Sid": "DenyPermBoundaryUserSideDeletions",
+            "Effect": "Deny",
+            "Action": "iam:DeleteUserPermissionsBoundary",
+            "Resource": "arn:aws:iam::Your-Account-ID:policy/IAMRestrictPermissionsBoundary"
+        },
+        {
+            "Sid": "DenyRemovalOfPermBoundaryFromAnyUserOrRole",
+            "Effect": "Deny",
+            "Action": [
+                "iam:DeleteUserPermissionsBoundary",
+                "iam:DeleteRolePermissionsBoundary"
+            ],
+            "Resource": [
+                "arn:aws:iam::Your-Account-ID:user/*",
+                "arn:aws:iam::Your-Account-ID:role/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "iam:PermissionsBoundary": "arn:aws:iam::Your-Account-ID:policy/IAMRestrictPermissionsBoundary"
+                }
+            }
+        },
+        {
+            "Sid": "DenyAccessIfRequiredPermBoundaryIsNotBeingApplied",
+            "Effect": "Deny",
+            "Action": [
+                "iam:PutUserPermissionsBoundary",
+                "iam:PutRolePermissionsBoundary"
+            ],
+            "Resource": [
+                "arn:aws:iam::Your-Account-ID:user/*",
+                "arn:aws:iam::Your-Account-ID:role/*"
+            ],
+            "Condition": {
+                "StringNotEquals": {
+                    "iam:PermissionsBoundary": "arn:aws:iam::Your-Account-ID:policy/IAMRestrictPermissionsBoundary"
+                }
+            }
+        },
+        {
+            "Sid": "DenyUserAndRoleCreationWithOutPermBoundary",
+            "Effect": "Deny",
+            "Action": [
+                "iam:CreateUser",
+                "iam:CreateRole"
+            ],
+            "Resource": [
+                "arn:aws:iam::Your-Account-ID:user/*",
+                "arn:aws:iam::Your-Account-ID:role/*"
+            ],
+            "Condition": {
+                "StringNotEquals": {
+                    "iam:PermissionsBoundary": "arn:aws:iam::Your-Account-ID:policy/IAMRestrictPermissionsBoundary"
+                }
+            }
+        }
+    ]
+}

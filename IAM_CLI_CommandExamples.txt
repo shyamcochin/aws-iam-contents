@@ -1,0 +1,43 @@
+	aws iam list-users
+	aws iam create-user --user-name John
+	aws iam list-policies
+	aws iam list-policies --query "Policies[?PolicyName == 'IAMReadOnlyAccess'].[PolicyName, Arn]"
+	aws iam attach-user-policy --user-name John --policy-arn < Policy ARN Here >
+	aws iam detach-user-policy --user-name John --policy-arn < Policy ARN Here >
+	aws iam list-attached-user-policies --user-name John
+	aws iam create-access-key --user-name John
+
+	aws iam create-policy --policy-name Ec2-S3Full --policy-document file://Ec2-S3Full.json
+	aws iam create-group --group-name S3User
+	aws iam get-group --group-name S3User
+	aws iam list-groups
+	aws iam add-user-to-group --user-name John --group-name S3User
+	aws iam list-policies --query "Policies[?PolicyName == 'Ec2-S3Full'].[PolicyName, Arn]"
+	aws iam attach-group-policy --policy-arn < Policy ARN Here >  --group-name S3User
+	aws iam list-attached-group-policies --group-name S3User
+	
+	
+	aws iam detach-group-policy --group-name S3User --policy-arn < Policy ARN Here >
+	aws iam detach-user-policy --user-name John --policy-arn < Policy ARN Here >
+	aws iam remove-user-from-group --user-name John --group-name S3User
+	aws iam delete-group --group-name S3User
+	aws iam delete-access-key --access-key-id <AccessKey ID> --user-name John
+	aws iam delete-user --user-name John
+	
+	aws s3 ls
+	aws iam list-users
+	aws ec2 describe-instances 
+	aws rds describe-db-instances 
+
+
+https://docs.aws.amazon.com/cli/latest/reference/iam/index.html#cli-aws-iam
+https://aws.amazon.com/premiumsupport/knowledge-center/iam-assume-role-cli/
+https://www.bluematador.com/learn/aws-cli-cheatsheet
+https://wiki.outscale.net/display/EN/Listing+Managed+Policies
+
+
+aws iam get-policy --policy-arn arn:aws:iam::123456789012:policy/MySamplePolicy
+aws sts get-caller-identity
+
+aws iam list-policies --query 'Policies[*].[PolicyName, Arn]' --output text
+aws iam list-policies --query 'Policies[?PolicyName=='ABAC-Demo'].Arn' --output text
